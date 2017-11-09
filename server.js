@@ -1,5 +1,18 @@
 const fs = require('fs-extra')
-var config = fs.readJsonSync('./config.json')
+let configfile = './config.json';
+
+if (!fs.pathExistsSync(configfile)) {
+  console.log('---------------------------------------------');
+  console.log('config file does not exsist, creating one....');
+  fs.outputJsonSync(configfile, {
+    DiscordToken: ' --- BOT TOKEN HERE --- '
+  })
+  console.log(' ');
+  console.log('Place a discord token inside of: config.json');
+  console.log('---------------------------------------------');
+  process.exit()
+}
+var config = fs.readJsonSync(configfile)
 if (config.DiscordToken != " --- BOT TOKEN HERE --- ") {
   console.log();
   const express = require('express')
