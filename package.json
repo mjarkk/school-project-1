@@ -1,0 +1,20 @@
+{
+  "name": "school-project-1",
+  "version": "1.0.0",
+  "main": "server.js",
+  "repository": "https://github.com/mjarkk/school-project-1",
+  "author": "Mark Kopenga <mkopenga@gmail.com>",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "fs-extra": "^4.0.2",
+    "node-fetch": "^1.7.3",
+    "node-watch": "^0.5.5",
+    "npm-sass": "^2.2.1",
+    "shelljs": "^0.7.8"
+  }
+}
