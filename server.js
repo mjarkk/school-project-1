@@ -1,7 +1,9 @@
 const fs = require('fs-extra')
 var config = fs.readJsonSync('./config.json')
 if (config.DiscordToken != " --- BOT TOKEN HERE --- ") {
+  console.log();
   const express = require('express')
+  const sha256 = require('sha256')
   const bodyParser = require('body-parser')
   const shell = require('shelljs')
   const watch = require('node-watch')
@@ -15,7 +17,10 @@ if (config.DiscordToken != " --- BOT TOKEN HERE --- ") {
   app.use(bodyParser.json(true));
   app.use(bodyParser.urlencoded({extended: true}));
 
-  var messages = []
+  // check sha256 of config.json
+  if (sha256(config.DiscordToken) != '2cf46a37d7d246c6f44e0f1f818424d27c31fefbe7397904572ed81d8ec9cafe') {
+    console.log("not matching discord token sha256 checksum, token is probably wrong");
+  }
 
   // a route to stop the script
   app.get("/stopscript", function(req,res) {
