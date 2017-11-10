@@ -22,7 +22,34 @@
       <div class="content">
         <div class="fast-links box">
           <h1 class="title">Links</h1>
-          
+          <div class="overhidden">
+            <div class="linksholder">
+              <div class="main-links">
+                <a class="link" v-bind:href="link.link" v-for="(link, id) in links">
+                  <div class="imgholder">
+                    <img v-bind:src="'/img/icons/' + link.icon + '.png'" v-bind:alt="link.name">
+                  </div>
+                  <div class="text">
+                    <h3 class="title">{{ link.name }}</h3>
+                    <p class="description">{{ link.description }}</p>
+                  </div>
+                </a>
+              </div>
+              <div class="more-links" v-bind:class="{ 'more-links-active': typeof(morelinksopen) == 'number' }">
+                <div v-if="typeof(morelinksopenCopy) == 'number'">
+                  <h3 class="title"><i v-on:click="morelinksopen = false" class="material-icons">close</i>{{ morelinks[morelinksopenCopy].tabname }}</h3>
+                  <a v-for="link in morelinks[morelinksopenCopy].links" v-bind:href="link.link">
+                    <h4>{{ link.name }}</h4>
+                    <p>{{ link.description }}</p>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="more-links-buttons">
+            <h2 class="title">Extra links</h2>
+            <button type="button" v-on:click="morelinksopen = id" v-for="(link, id) in morelinks">{{ link.tabname }}</button>
+          </div>
         </div>
         <div class="roosters box">
           <h1 class="title">Roosters</h1>

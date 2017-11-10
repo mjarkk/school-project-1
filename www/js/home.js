@@ -1,7 +1,9 @@
 var fastlinks = new Vue({
   el: '.fast-links',
   data: {
-    "links": [
+    morelinksopen: false,
+    morelinksopenCopy: false,
+    links: [
       {
         "name": "Moodle",
         "icon": "moodle",
@@ -24,7 +26,7 @@ var fastlinks = new Vue({
         "link": "https://login.microsoftonline.com/"
       }
     ],
-    "morelinks": [
+    morelinks: [
       {
         "tabname": "Cijfer",
         "links": [
@@ -87,5 +89,13 @@ var fastlinks = new Vue({
         ]
       }
     ]
+  },
+  watch: {
+    morelinksopen: function(newval) {
+      var vm = this;
+      if (typeof(newval) == 'number') {
+        vm.morelinksopenCopy = newval;
+      }
+    }
   }
 })
