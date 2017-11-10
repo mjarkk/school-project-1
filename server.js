@@ -1,20 +1,20 @@
 const fs = require('fs-extra')
+const colors = require('colors');
 let configfile = './config.json';
 
 if (!fs.pathExistsSync(configfile)) {
-  console.log('---------------------------------------------');
-  console.log('config file does not exsist, creating one....');
+  console.log(colors.red.bold('---------------------------------------------'));
+  console.log(colors.red.bold('config file does not exsist, creating one....'));
   fs.outputJsonSync(configfile, {
     DiscordToken: ' --- BOT TOKEN HERE --- '
   })
   console.log(' ');
-  console.log('Place a discord token inside of: config.json');
-  console.log('---------------------------------------------');
+  console.log(colors.red.bold('Place a discord token inside of: config.json'));
+  console.log(colors.red.bold('---------------------------------------------'));
   process.exit()
 }
 var config = fs.readJsonSync(configfile)
 if (config.DiscordToken != " --- BOT TOKEN HERE --- ") {
-  console.log();
   const express = require('express')
   const sha256 = require('sha256')
   const bodyParser = require('body-parser')
@@ -27,12 +27,13 @@ if (config.DiscordToken != " --- BOT TOKEN HERE --- ") {
   const app = express()
 
   app.use(express.static('./www/'))
+  app.use('/node', express.static('./node_modules/'))
   app.use(bodyParser.json(true));
   app.use(bodyParser.urlencoded({extended: true}));
 
   // check sha256 of config.json
-  if (sha256(config.DiscordToken) != '2cf46a37d7d246c6f44e0f1f818424d27c31fefbe7397904572ed81d8ec9cafe') {
-    console.log("not matching discord token sha256 checksum, token is probably wrong");
+  if (sha256(config.DiscordToken) != '52a67300203195fb42651c221199ecff43269ee5bc755f7b58d582682369304e') {
+    console.log(colors.red("not matching discord token sha256 checksum, token is probably wrong"));
   }
 
   // a route to stop the script
@@ -56,18 +57,18 @@ if (config.DiscordToken != " --- BOT TOKEN HERE --- ") {
 
       }).catch(function(err) {
         console.log(' ');
-        console.log('---------------------------------');
-        console.log('Port: ' + port + ' already in use!');
-        console.log('Try to start the webserver again');
-        console.log('---------------------------------');
+        console.log(colors.red.bold('---------------------------------'));
+        console.log(colors.red.bold('Port: ' + port + ' already in use!'));
+        console.log(colors.red.bold('Try to start the webserver again'));
+        console.log(colors.red.bold('---------------------------------'));
         process.exit()
       });
       setTimeout(function () {
         console.log(' ');
-        console.log('---------------------------------');
-        console.log('Port: ' + port + ' already in use!');
-        console.log('Try to start the webserver again');
-        console.log('---------------------------------');
+        console.log(colors.red.bold('---------------------------------'));
+        console.log(colors.red.bold('Port: ' + port + ' already in use!'));
+        console.log(colors.red.bold('Try to start the webserver again'));
+        console.log(colors.red.bold('---------------------------------'));
         process.exit()
       }, 1000);
     } else {
@@ -113,11 +114,11 @@ if (config.DiscordToken != " --- BOT TOKEN HERE --- ") {
 
   client.on('message', message => {
     if (message.content === 'ping') {
-      message.reply('pong');
+      message.reply('pong')
     }
   });
 
   client.login(config.DiscordToken);
 } else {
-  console.log('No discord token inside config.json');
+  console.log(colors.red.bold('No discord token inside config.json'));
 }

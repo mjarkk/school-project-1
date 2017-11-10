@@ -11,3 +11,7 @@ This is a repo for a school project
 2. Open a terminal inside the project folder and type:
 3. yarn install
 4. yarn start
+
+
+## To do:
+- Create webpage
