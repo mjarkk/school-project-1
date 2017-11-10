@@ -1,3 +1,6 @@
+// color theme
+// https://material.io/color/#!/?view.left=0&view.right=0&primary.color=1976D2
+
 *
   padding: 0px
   margin: 0px
@@ -6,3 +9,47 @@
 body
   font-family: 'Roboto', sans-serif
   font-size: 20px
+  background-color: #eee
+
+.header
+  padding: 20px
+  background-color: #1976d2
+  position: fixed
+  width: 100vw
+  top: 0px
+  left: 0px
+  h1
+    font-size: 30px
+    color: white
+
+.appshell
+  .background
+    height: 95px
+    max-height: 95px
+    .color
+      height: 300px
+      background-color: #63a4ff
+      box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)
+  .content
+    display: flex
+    justify-content: center
+    align-items: center
+    flex-direction: row
+    flex-wrap: wrap
+    display: -webkit-flex
+    -webkit-justify-content: center
+    -webkit-align-items: center
+    -webkit-flex-direction: row
+    -webkit-flex-wrap: wrap
+    .box
+      margin: 20px 10px
+      width: 100vw
+      max-width: 550px
+      box-sizing: border-box
+      padding: 10px
+      background-color: white
+      box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)
+      h1.title
+        font-size: 22px
+        border-bottom: 2px solid rgba(0, 0, 0, 0.2)
+        padding-bottom: 5px
