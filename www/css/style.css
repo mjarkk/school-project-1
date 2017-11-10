@@ -151,3 +151,45 @@ body {
         margin: 2px;
         border-radius: 4px;
         color: white; }
+    .appshell .content .box .schedulemenu {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      display: -webkit-flex;
+      -webkit-justify-content: center;
+      -webkit-align-items: center;
+      -webkit-flex-direction: column; }
+      .appshell .content .box .schedulemenu .search {
+        padding: 30px 10px;
+        box-sizing: border-box; }
+        .appshell .content .box .schedulemenu .search label {
+          width: 100%;
+          display: inline-block;
+          cursor: text; }
+        .appshell .content .box .schedulemenu .search input {
+          font-size: 20px;
+          width: 100%;
+          padding: 5px;
+          box-sizing: border-box;
+          border-bottom: 2px solid #ff5252; }
+      .appshell .content .box .schedulemenu .sugestions {
+        max-height: 250px;
+        min-height: 250px;
+        overflow-y: auto;
+        overflow-x: hidden; }
+        .appshell .content .box .schedulemenu .sugestions button {
+          padding: 7px 15px;
+          cursor: pointer;
+          font-size: 16px;
+          font-weight: 600;
+          background-color: #c50e29;
+          margin: 2px;
+          border-radius: 4px;
+          color: white; }
+          .appshell .content .box .schedulemenu .sugestions button span {
+            font-size: 14px;
+            opacity: 0.7;
+            position: relative;
+            top: -1px;
+            padding-right: 4px; }

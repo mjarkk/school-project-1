@@ -7,6 +7,11 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css">
+    <style>
+      [v-cloak] {
+        display: none;
+      }
+    </style>
   </head>
   <body>
     <div class="header">
@@ -20,7 +25,7 @@
         <div class="color"></div>
       </div>
       <div class="content">
-        <div class="fast-links box">
+        <div class="fast-links box" v-cloak>
           <h1 class="title">Links</h1>
           <div class="overhidden">
             <div class="linksholder">
@@ -51,8 +56,17 @@
             <button type="button" v-on:click="morelinksopen = id" v-for="(link, id) in morelinks">{{ link.tabname }}</button>
           </div>
         </div>
-        <div class="roosters box">
+        <div class="roosters box" v-cloak>
           <h1 class="title">Roosters</h1>
+          <div class="schedulemenu" v-if="schedulemenu">
+            <div class="search">
+              <label for="searchroosters">Rooster zoekken</label>
+              <input type="text" id="searchroosters" name="searchroosters" placeholder="B..." v-model="search">
+            </div>
+            <div class="sugestions">
+              <button class="surgestion" type="button" v-if="thing.classname.toLowerCase().includes(search.toLowerCase())" v-for="(thing, id) in timetableoptions"><span>{{ thing.type }}</span>{{ thing.classname }}</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
