@@ -35,7 +35,7 @@ var fastlinks = new Vue({
         "links": [
           {
             "name": "EduArte",
-            "description": "Hier zijn alle school cijfers te vinden en je 60% aanwezighijt.",
+            "description": "Automatisch uitschrijf systeem",
             "link": "https://alfacollege-selfservice.educus.nl/app/login/Alfa-college?0"
           },{
             "name": "Alfa-online",
@@ -109,6 +109,7 @@ var fastlinks = new Vue({
     search: '',
     showtimetable: false,
     schedulemenu: false,
+    dayhours: [9,10,11,12,13,14,15,16],
     roosterdata: {
       monday: [],
       tuesday: [],

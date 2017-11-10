@@ -67,6 +67,20 @@
               <button class="surgestion" type="button" v-if="thing.classname.toLowerCase().includes(search.toLowerCase())" v-for="(thing, id) in timetableoptions"><span>{{ thing.type }}</span>{{ thing.classname }}</button>
             </div>
           </div>
+          <div class="timetable" v-if="showtimetable">
+            <div class="day inforow">
+              <div class="title"></div>
+              <div class="houre" v-bind:class="" v-for="hour in dayhours">
+                {{ hour }}
+              </div>
+            </div>
+            <div class="day" v-for="arr, day in roosterdata">
+              <div class="title">{{ day.toUpperCase().slice(0,2) }}</div>
+              <div class="houre" v-bind:class="" v-for="hour in dayhours">
+                <!-- {{ hour }} -->
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

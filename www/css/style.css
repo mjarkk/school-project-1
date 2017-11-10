@@ -14,7 +14,8 @@ body {
   position: fixed;
   width: 100vw;
   top: 0px;
-  left: 0px; }
+  left: 0px;
+  z-index: 50; }
   .header h1 {
     font-size: 30px;
     color: white; }
@@ -193,3 +194,35 @@ body {
             position: relative;
             top: -1px;
             padding-right: 4px; }
+    .appshell .content .box .timetable {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      display: -webkit-flex;
+      -webkit-flex-direction: row;
+      -webkit-flex-wrap: nowrap;
+      padding: 20px 0px; }
+      .appshell .content .box .timetable .day {
+        border-left: 1px solid #ccc;
+        width: 100%; }
+        .appshell .content .box .timetable .day .houre, .appshell .content .box .timetable .day .title {
+          height: 50px; }
+        .appshell .content .box .timetable .day .title {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          display: -webkit-flex;
+          -webkit-justify-content: center;
+          -webkit-align-items: center;
+          font-weight: 600; }
+      .appshell .content .box .timetable .inforow {
+        border-left: 0px solid white; }
+        .appshell .content .box .timetable .inforow .houre {
+          border-bottom: 1px solid #ccc;
+          display: flex;
+          justify-content: flex-end;
+          display: -webkit-flex;
+          -webkit-justify-content: flex-end;
+          box-sizing: border-box;
+          padding: 10px;
+          font-weight: 600; }
