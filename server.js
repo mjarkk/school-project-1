@@ -1,6 +1,8 @@
 const fs = require('fs-extra')
-const colors = require('colors');
+const colors = require('colors')
+const cheerio = require('cheerio')
 let configfile = './config.json';
+const port = 7777;
 
 if (!fs.pathExistsSync(configfile)) {
   console.log(colors.red.bold('---------------------------------------------'));
@@ -28,7 +30,6 @@ const sass = require('npm-sass')
 const fetch = require('node-fetch')
 const request = require('request')
 const Discord = require("discord.js")
-const cheerio = require('cheerio')
 const client = new Discord.Client()
 const app = express()
 
@@ -55,7 +56,6 @@ app.get("/roosterlist",function(req,res) {
 })
 
 // test if there is already a server running if so stop it and ask the user to run the script again
-const port = 7777;
 fetch('http://127.0.0.1:' + port + '/')
 .then(function(res) {
   if (res.ok) {
@@ -161,8 +161,16 @@ client.on('ready', () => {
 });
 
 client.on('message', message => {
+  var message = message;
   if (message.content === 'ping') {
     message.reply('pong')
+  } else if (message.content.startsWith('!rooster')) {
+    // fetch('http://localhost:' + port + '/t/student/https%3A%2F%2Froosters.xedule.nl%2FAttendee%2FScheduleCurrent%2F83419%3FCode%3DB-ITB4-1e%26attId%3D1%26OreId%3D34').then(function(res) {
+    //   return res.text();
+    // }).then(function(body) {
+    //   message.reply(body)
+    // });
+    message.reply('can\'t do')
   }
 });
 
@@ -198,108 +206,63 @@ function givetimetable(req, res) {
 
 // rooster api from: https://github.com/mjarkk/node-xedule-web-api
 function GetXedule (timetablehtml,type) {
-  var schoolweek = {
+  var type = type;
+  const $ = cheerio.load(timetablehtml);
+  var output = {
     monday: [],
     tuesday: [],
     wednsday: [],
     thursday: [],
     friday: []
-  };
-  var timetable = "";
-  timetable = timetablehtml.replace(/(\r\n|\n|\r)/gm,"");
-  rawhtmltojson();
-  function isNumber(n) { return /^-?[\d.]+(?:e-?\d+)?$/.test(n); };
-  function rawhtmltojson() {
-    if (timetable.search(/<div class="Les"/i) != -1) {
-      timetable = timetable.substr(timetable.search(/<div class="Les"/i), timetable.length);
-      if (timetable.search(/<\/div>                <div class="Les"/i) != -1) {
-        CW = timetable.substr(0, timetable.search(/<\/div>                <div class="Les"/i) + 6);
-      } else {
-        CW = timetable;
-      }
-      timetable = timetable.substr(CW.length, timetable.length);
-      CW = CW.substr(CW.search(/eft:/i) + 4, CW.length);
-      CWday = CW.substr(0, CW.search(/">/i));
-      CW = CW.substr(CW.search(/title="/i) + 7, CW.length);
-      CWsubject = CW.substr(0, CW.search(/">/i));
-      CW = CW.substr(CW.search(/title="/i) + 7, CW.length);
-      CWtime = CW.substr(0, CW.search(/">/i));
-      CW = CW.substr(CW.search(/title="/i) + 7, CW.length);
-      CWplace = CW.substr(0, CW.search(/">/i));
-      CW = CW.substr(CW.search(/title="/i) + 7, CW.length);
-      CWteacher = CW.substr(0, CW.search(/">/i));
-      if (isNumber(CWplace.substr(0,1))) {
-        CWplace = "none";
-      }
-      if (CWteacher == "" || false || 0 || NaN || null || undefined) {
-        CWteacher = "none";
-      }
-      CWTimeStartHours = CWtime.substr(0,2);
-      CWTimeStartMinutes = CWtime.substr(3,2);
-      CWTimeEndHourse = CWtime.substr(6,2);
-      CWTimeEndMinutes = CWtime.substr(9,2);
-      if (type == "student" || type == "studentgroep") {
-        var CWJSON = {
-          subject: CWsubject,
-          time: {
-            HourseStart: CWTimeStartHours,
-            MinutesStart: CWTimeStartMinutes,
-            HourseEnd: CWTimeEndHourse,
-            MinutesEnd: CWTimeEndMinutes
-          },
-          place: CWplace,
-          teacher: CWteacher
-        };
-      } else if (type == "teacher" || type == "medewerker") {
-        var CWJSON = {
-          subject: CWsubject,
-          time: {
-            HourseStart: CWTimeStartHours,
-            MinutesStart: CWTimeStartMinutes,
-            HourseEnd: CWTimeEndHourse,
-            MinutesEnd: CWTimeEndMinutes
-          },
-          students: CWplace,
-          local: CWteacher
-        };
-      } else if (type == "class" || type == "faciliteit") {
-        var CWJSON = {
-          subject: CWsubject,
-          time: {
-            HourseStart: CWTimeStartHours,
-            MinutesStart: CWTimeStartMinutes,
-            HourseEnd: CWTimeEndHourse,
-            MinutesEnd: CWTimeEndMinutes
-          },
-          place: CWplace,
-          class: "---"
-        };
-      } else {
-        var CWJSON = {
-          subject: CWsubject,
-          time: {
-            HourseStart: CWTimeStartHours,
-            MinutesStart: CWTimeStartMinutes,
-            HourseEnd: CWTimeEndHourse,
-            MinutesEnd: CWTimeEndMinutes
-          },
-          place: CWplace,
-          teacher: CWteacher
-        };
-      }
-      if (CWday == " 160px;") {
-        schoolweek.monday.push(CWJSON);
-      } else if (CWday == " 318px;") {
-        schoolweek.tuesday.push(CWJSON);
-      } else if (CWday == " 476px;") {
-        schoolweek.wednsday.push(CWJSON);
-      } else if (CWday == " 634px;") {
-        schoolweek.thursday.push(CWJSON);
-      } else if (CWday == " 792px;") {
-        schoolweek.friday.push(CWJSON);
-      } else {}
-      rawhtmltojson();
-    }
   }
-  return schoolweek;
+  $('body').find('.Les').each(function() {
+    var ToAdd = {
+      time: {
+        HourseEnd: "",
+        HourseStart: "",
+        MinutesEnd: "",
+        MinutesStart: ""
+      }
+    }
+    $(this).find('.LesCode').each(function() {
+      ToAdd['subject'] = $(this).text().replace(/\s/g, '')
+    })
+    $(this).find('.LesTijden').each(function() {
+      var fulltime = $(this).text().replace(/\s/g, '');
+      ToAdd.time.HourseStart = fulltime.slice(0,2)
+      ToAdd.time.MinutesStart = fulltime.slice(3,5)
+      ToAdd.time.HourseEnd = fulltime.slice(6,8)
+      ToAdd.time.MinutesEnd = fulltime.slice(9,11)
+    })
+    $(this).find('.AttendeeBlockColumn_1 div a').each(function() {
+      var item = $(this).text().replace(/\s/g, '')
+      if (type == 'student') {
+        ToAdd['place'] = item
+      } else if (type == 'class') {
+        ToAdd['teacher'] = item
+      } else if (type == 'teacher') {
+        ToAdd['students'] = item
+      }
+    })
+    $(this).find('.AttendeeBlockColumn_2 div a').each(function() {
+      var item = $(this).text().replace(/\s/g, '')
+      if (type == 'student') {
+        ToAdd['teacher'] = item
+      } else if (type == 'teacher') {
+        ToAdd['local'] = item
+      }
+    })
+    if ($(this).css('left') == '160px') {
+      output.monday.push(ToAdd)
+    } else if ($(this).css('left') == '318px') {
+      output.tuesday.push(ToAdd)
+    } else if ($(this).css('left') == '476px') {
+      output.wednsday.push(ToAdd)
+    } else if ($(this).css('left') == '634px') {
+      output.thursday.push(ToAdd)
+    } else if ($(this).css('left') == '792px') {
+      output.friday.push(ToAdd)
+    }
+  });
+  return output;
 }

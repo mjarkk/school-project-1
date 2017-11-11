@@ -210,7 +210,56 @@ body
           border-left: 1px solid #ccc
           width: 100%
           .houre, .title
-            height: 50px
+            height: 70px
+          .houre
+            box-sizing: border-box
+            padding: 2px
+            .roosteritem
+              position: relative
+              background-color: #63A4FF
+              color: white
+              display: flex
+              flex-direction: column
+              align-items: flex-start
+              justify-content: flex-start
+              display: -webkit-flex
+              -webkit-flex-direction: column
+              -webkit-align-items: flex-start
+              -webkit-justify-content: flex-start
+              padding: 1px
+              box-sizing: border-box
+              border-radius: 3px
+              box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)
+              div
+                display: inline-block
+                max-width: 100%
+                overflow: hidden
+                width: 100%
+                text-align: center
+              div.big
+                font-size: 17px
+                max-height: 17px
+              div.small
+                font-size: 12px
+                max-height: 12px
+              div.time
+                width: 100%
+                min-width: 100%
+                max-height: 30px
+              div.small.wrap
+                width: 50%
+                min-width: 37px
+              .wrapper
+                display: flex
+                justify-content: center
+                align-items: center
+                flex-wrap: wrap
+                flex-direction: row
+                display: -webkit-flex
+                -webkit-justify-content: center
+                -webkit-align-items: center
+                -webkit-flex-wrap: wrap
+                -webkit-flex-direction: row
           .title
             display: flex
             justify-content: center
@@ -220,9 +269,10 @@ body
             -webkit-align-items: center
             font-weight: 600
         .inforow
+          width: 60%
           border-left: 0px solid white
           .houre
-            border-bottom: 1px solid #ccc
+            border-top: 1px solid #ccc
             display: flex
             justify-content: flex-end
             display: -webkit-flex
@@ -230,3 +280,29 @@ body
             box-sizing: border-box
             padding: 10px
             font-weight: 600
+      .offline-holder
+        max-height: 1px
+        width: 100%
+        p
+          height: 70px
+          width: 200px
+          display: flex
+          align-items: flex-end
+          display: -webkit-flex
+          -webkit-align-items: flex-end
+          position: relative
+          bottom: 59px
+          left: -10px
+          box-sizing: border-box
+          padding: 5px
+          font-weight: 600
+          background: -moz-linear-gradient(75deg, rgba(255,38,0,0.7) 0%, rgba(255,255,255,0) 40%)
+          background: -webkit-linear-gradient(75deg, rgba(255,38,0,0.7) 0%, rgba(255,255,255,0) 40%)
+      .timetablenavigator
+        padding: 10px 5px
+        i
+          font-size: 30px
+          position: relative
+          top: 8px
+          padding-right: 5px
+          cursor: pointer
