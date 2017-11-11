@@ -1,0 +1,51 @@
+<div class="roosters box">
+  <h1 class="title">Roosters</h1>
+  <div class="timetablenavigator" v-if="showtimetable">
+    <i class="material-icons" v-on:click="backtosearch()">search</i>{{ timetableclassname }}
+  </div>
+  <div class="schedulemenu" v-if="schedulemenu">
+    <div class="search">
+      <label for="searchroosters">Rooster zoekken</label>
+      <input type="text" id="searchroosters" name="searchroosters" placeholder="B..." v-model="search">
+    </div>
+    <div class="sugestions">
+      <button
+        class="surgestion"
+        type="button"
+        v-if="thing.classname.toLowerCase().includes(search.toLowerCase())"
+        v-for="(thing, id) in timetableoptions"
+        v-on:click="loadtimetable(thing.url,thing.type,thing.classname,true)">
+        <span>{{ thing.type }}</span>{{ thing.classname }}
+      </button>
+    </div>
+  </div>
+  <div class="timetable" v-if="showtimetable">
+    <div class="day inforow">
+      <div class="title"></div>
+      <div class="houre" v-for="hour in dayhours">{{ hour }}</div>
+    </div>
+    <div class="day" v-for="arr, day in roosterdata">
+      <div class="title">{{ day.toUpperCase().slice(0,2) }}</div>
+      <div class="houre" v-for="hour in dayhours">
+        <div
+          class="roosteritem"
+          v-if="timetableitem.time.HourseStart == hour.toString() || (timetableitem.time.HourseStart == '09' && hour.toString() == '9')"
+          v-for="timetableitem in roosterdata[day]"
+          v-bind:style="{
+            height: ((timetableitem.time.HourseEnd - timetableitem.time.HourseStart + (timetableitem.time.MinutesEnd / 60) - (timetableitem.time.MinutesStart / 60)) * 100) + '%',
+            top: ((timetableitem.time.MinutesStart / 60) * 100) + '%'
+          }">
+          <div class="big" v-if="timetableitem.subject">{{ timetableitem.subject }}</div>
+          <div class="small time">{{ timetableitem.time.HourseStart + ':' + timetableitem.time.MinutesStart + ' ' + timetableitem.time.HourseEnd + ':' + timetableitem.time.MinutesEnd }}</div>
+          <div class="wrapper">
+            <div class="small wrap" v-if="timetableitem.students">{{ timetableitem.students }}</div>
+            <div class="small wrap" v-if="timetableitem.local">{{ timetableitem.local }}</div>
+            <div class="small wrap" v-if="timetableitem.place">{{ timetableitem.place }}</div>
+            <div class="small wrap" v-if="timetableitem.teacher">{{ timetableitem.teacher }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="offline-holder"><p v-if="fromofflinestorage && showtimetable">Oud rooster!</p></div>
+</div>

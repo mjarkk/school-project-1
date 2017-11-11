@@ -30,9 +30,13 @@ const sass = require('npm-sass')
 const fetch = require('node-fetch')
 const request = require('request')
 const Discord = require("discord.js")
+const ejs = require('ejs')
+const path = require('path');
 const client = new Discord.Client()
 const app = express()
 
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, '/www'));
 app.use(express.static('./www/'))
 app.use('/node', express.static('./node_modules/'))
 app.use(bodyParser.json(true));
@@ -53,6 +57,18 @@ app.get("/stopscript", function(req,res) {
 
 app.get("/roosterlist",function(req,res) {
   res.json(timetabledata.links)
+})
+
+app.get('/',function(req,res) {
+  res.render('index.ejs', {
+    fullpage: true
+  });
+})
+
+app.get('/rooster/:class',function(req,res) {
+  res.render('index.ejs', {
+    fullpage: false
+  });
 })
 
 // test if there is already a server running if so stop it and ask the user to run the script again
@@ -165,11 +181,7 @@ client.on('message', message => {
   if (message.content === 'ping') {
     message.reply('pong')
   } else if (message.content.startsWith('!rooster')) {
-    // fetch('http://localhost:' + port + '/t/student/https%3A%2F%2Froosters.xedule.nl%2FAttendee%2FScheduleCurrent%2F83419%3FCode%3DB-ITB4-1e%26attId%3D1%26OreId%3D34').then(function(res) {
-    //   return res.text();
-    // }).then(function(body) {
-    //   message.reply(body)
-    // });
+
     message.reply('can\'t do')
   }
 });
