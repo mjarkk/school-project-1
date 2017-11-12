@@ -8,10 +8,11 @@ if (!fs.pathExistsSync(configfile)) {
   console.log(colors.red.bold('---------------------------------------------'));
   console.log(colors.red.bold('config file does not exsist, creating one....'));
   fs.outputJsonSync(configfile, {
-    DiscordToken: ' --- BOT TOKEN HERE --- '
+    DiscordToken: ' --- BOT TOKEN HERE --- ',
+    groupname: {}
   })
   console.log(' ');
-  console.log(colors.red.bold('Place a discord token inside of: config.json'));
+  console.log(colors.red.bold('Place a discord token inside of: config.json and group name'));
   console.log(colors.red.bold('---------------------------------------------'));
   process.exit()
 }
@@ -89,6 +90,34 @@ app.get('/rooster/:class',function(req,res) {
     fullpage: false
   });
 })
+
+// rooster api from: https://github.com/mjarkk/node-xedule-web-api
+app.get('/t/:type/:timetableurl', givetimetable);
+function givetimetable(req, res) {
+  var url = req.params['timetableurl'];
+  var type = req.params['type'];
+  if (url.substring(0, 26) == "https://roosters.xedule.nl") {
+    request({
+      uri: url,
+    }, function(error, response, body) {
+      res.json({
+        status: true,
+        requrl: url,
+        type: type,
+        weekdata: GetXedule(body,type)
+      });
+    })
+  } else {
+    res.json({
+      status: false,
+      why: "not xedule url"
+    });
+  }
+}
+
+app.get('*', function(req, res){
+  res.render('404.ejs');
+});
 
 // test if there is already a server running if so stop it and ask the user to run the script again
 fetch('http://127.0.0.1:' + port + '/')
@@ -197,51 +226,97 @@ function UpdateTimeTableLinks() {
 }
 UpdateTimeTableLinks()
 
-// discord bot
-const client = new Discord.Client()
-client.on('ready', () => {
-  console.log('I am ready!');
-});
-client.on('message', message => {
-  var message = message;
-  if (message.content === 'ping') {
-    message.reply('pong')
-  } else if (message.content === '!rooster') {
-    var rooster = 'B-ITB4-1e'
-    timetablescreenshot(rooster,function() {
-      message.channel.sendMessage("Het rooster van: " + rooster, {
-        file: './discord-bot-content/screenshot.png'
-      });
+function addgroupe(data) {
+  var data = data;
+  fs.readJson(configfile, (err, output) => {
+    config = output;
+    config.groupname[data.serverid] = data;
+    fs.outputJson(configfile, config, err => {
+      console.log('updated config');
     })
-  } else if (message.content.startsWith('!rooster')) {
-    message.reply('can\'t do')
-  }
-});
-client.login(config.DiscordToken);
+  })
+}
 
-// rooster api from: https://github.com/mjarkk/node-xedule-web-api
-app.get('/t/:type/:timetableurl', givetimetable);
-function givetimetable(req, res) {
-  var url = req.params['timetableurl'];
-  var type = req.params['type'];
-  if (url.substring(0, 26) == "https://roosters.xedule.nl") {
-    request({
-      uri: url,
-    }, function(error, response, body) {
-      res.json({
-        status: true,
-        requrl: url,
-        type: type,
-        weekdata: GetXedule(body,type)
+// discord bot
+class Discordbot {
+  constructor(data) {
+    var vm = this;
+    if (data.token) {
+      vm.client = new Discord.Client()
+      vm.client.on('ready', () => {
+        vm.client.user.setGame('niks doen -_-')
+        console.log('I am ready!');
       });
-    })
-  } else {
-    res.json({
-      status: false,
-      why: "not xedule url"
-    });
+      vm.client.on('message', message => {
+        var message = message;
+        var content = message.content;
+        if (content === 'ping') {
+          message.reply('pong')
+        } else if (content === '!rooster') {
+          // console.log(message.channel.guild.name); // server name
+          var serverid = message.channel.guild.id;
+          var rooster = config.groupname[serverid]
+          if (typeof(rooster) == "object") {
+            timetablescreenshot(rooster.classname,function() {
+              setTimeout(function () {
+                message.channel.send("Het rooster van: " + rooster.classname, {
+                  file: './discord-bot-content/screenshot.png'
+                });
+              }, 500);
+            })
+          } else {
+            message.channel.send("Deze discord server heeft nog geen rooster voeg, type: !setrooster {klas/leeraar/locaal}")
+          }
+        } else if (content.startsWith('!setrooster ')){
+          var classname = content.replace('!setrooster ','');
+          if (timetabledata.LinksByIndex[classname]) {
+            addgroupe({
+              servername: message.channel.guild.name,
+              serverid: message.channel.guild.id,
+              classname: classname
+            })
+            message.channel.send("Oke het standaart rooster voor deze klas is nu " + classname)
+          } else {
+            message.channel.send("Hmmm dit rooster bestaad niet :(")
+          }
+        } else if (content.startsWith('!rooster ') && timetabledata.LinksByIndex[content.replace('!rooster ','')]) {
+          var classname = content.replace('!rooster ','');
+          timetablescreenshot(classname,function() {
+            setTimeout(function () {
+              message.channel.send("Het rooster van: " + classname, {
+                file: './discord-bot-content/screenshot.png'
+              });
+            }, 500);
+          })
+        } else if (content.startsWith('!rooster ')) {
+          message.reply('Geen rooster gevonden :(')
+        } else if (content === '!help' || content === 'help') {
+          message.channel.send(`Dingen die ik kan doen:
+!rooster = het standaart ingestelde rooster tonen
+!rooster { klas/leeraar/locaal } = een rooster voor het opgevraagde onderwerp
+!botinfo = botinfo dhaa
+!setrooster { klas/leeraar/locaal } = set het standaart rooster van de discord`)
+        } else if (content === '!botinfo' || content === 'botinfo') {
+          var ChannelHasStandaartRooster = typeof(config.groupname[message.channel.guild.id]) == "object";
+          message.channel.send(
+            'Rooster bot info: \n' +
+            '- Standaart rooster: ' + (ChannelHasStandaartRooster ? config.groupname[message.channel.guild.id].classname : "nog niks ingesteld")
+          )
+        } else if (content === 'test') {
+          // just for testing things :D
+          message.channel.send(`boring response :(`)
+        }
+      });
+      vm.client.login(data.token);
+    } else {
+      console.log('error: no discord token');
+    }
   }
 }
+
+new Discordbot({
+  token: config.DiscordToken
+})
 
 // function for creating a screenshot of a spesific timetable
 function timetablescreenshot(timetablename, callback) {
@@ -264,6 +339,7 @@ function timetablescreenshot(timetablename, callback) {
   })();
 }
 
+// automaticly create a screenshot of the page for readme.md
 setTimeout(function () {
   (async () => {
     const browser = await puppeteer.launch();
