@@ -13,4 +13,4 @@ This is a repo for a school project
 4. yarn start
 
 ## Screenshot
-![screenshot](https://github.com/mjarkk/wotnlclans/blob/master/pagescreenshot.png)
+![screenshot](https://github.com/mjarkk/school-project-1/blob/master/pagescreenshot.png)
