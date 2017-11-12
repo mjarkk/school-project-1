@@ -19,7 +19,8 @@ var config = fs.readJsonSync(configfile)
 if (config.DiscordToken != " --- BOT TOKEN HERE --- ") {
 
 var timetabledata = {
-  links: []
+  links: [],
+  LinksByIndex: {}
 }
 const express = require('express')
 const sha256 = require('sha256')
@@ -63,6 +64,24 @@ app.get('/',function(req,res) {
   res.render('index.ejs', {
     fullpage: true
   });
+})
+
+app.get('/api',function(req,res) {
+  res.render('api.ejs');
+})
+
+app.get('/roosterinf/:class',function(req,res) {
+  var selected = req.params.class;
+  if (timetabledata.LinksByIndex[selected]) {
+    res.json({
+      status: true,
+      data: timetabledata.LinksByIndex[selected]
+    })
+  } else {
+    res.json({
+      status: false
+    })
+  }
 })
 
 app.get('/rooster/:class',function(req,res) {
@@ -166,6 +185,13 @@ function UpdateTimeTableLinks() {
       });
     });
     timetabledata.links = roosteroptions;
+    for (var i = 0; i < roosteroptions.length; i++) {
+      timetabledata.LinksByIndex[roosteroptions[i].classname] = {
+        url: roosteroptions[i].url,
+        type: roosteroptions[i].type
+      }
+
+    }
     console.log('all rooster links have been updated');
   });
 }

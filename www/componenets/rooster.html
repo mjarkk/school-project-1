@@ -1,9 +1,9 @@
 <div class="roosters box">
   <h1 class="title">Roosters</h1>
-  <div class="timetablenavigator" v-if="showtimetable">
+  <div class="timetablenavigator" v-if="showtimetable && timetablefound">
     <i class="material-icons" v-on:click="backtosearch()">search</i>{{ timetableclassname }}
   </div>
-  <div class="schedulemenu" v-if="schedulemenu">
+  <div class="schedulemenu" v-if="schedulemenu && timetablefound">
     <div class="search">
       <label for="searchroosters">Rooster zoekken</label>
       <input type="text" id="searchroosters" name="searchroosters" placeholder="B..." v-model="search">
@@ -19,7 +19,10 @@
       </button>
     </div>
   </div>
-  <div class="timetable" v-if="showtimetable">
+  <div class="no-timetable" v-if="!timetablefound">
+    <h1>Geen rooster gevonden</h1>
+  </div>
+  <div class="timetable" v-if="showtimetable && timetablefound">
     <div class="day inforow">
       <div class="title"></div>
       <div class="houre" v-for="hour in dayhours">{{ hour }}</div>
@@ -47,5 +50,5 @@
       </div>
     </div>
   </div>
-  <div class="offline-holder"><p v-if="fromofflinestorage && showtimetable">Oud rooster!</p></div>
+  <div class="offline-holder"><p v-if="fromofflinestorage && showtimetable && timetablefound">Oud rooster!</p></div>
 </div>

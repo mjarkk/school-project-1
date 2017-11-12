@@ -302,3 +302,7 @@ body {
         top: 8px;
         padding-right: 5px;
         cursor: pointer; }
+    .appshell .content .box .no-timetable {
+      padding: 70px 10px; }
+      .appshell .content .box .no-timetable h1 {
+        text-align: center; }
