@@ -243,6 +243,7 @@ function givetimetable(req, res) {
   }
 }
 
+// function for creating a screenshot of a spesific timetable
 function timetablescreenshot(timetablename, callback) {
   (async () => {
     const browser = await puppeteer.launch();
@@ -262,6 +263,19 @@ function timetablescreenshot(timetablename, callback) {
     callback()
   })();
 }
+
+setTimeout(function () {
+  (async () => {
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+    await page.setViewport({ width: 1300, height: 750 });
+    await page.goto('http://localhost:' + port + '/', {waitUntil: 'networkidle2'});
+    await page.screenshot({
+      path: './pagescreenshot.png'
+    });
+    await browser.close();
+  })();
+}, 10000);
 
 } else {
   console.log(colors.red.bold('No discord token inside config.json'));

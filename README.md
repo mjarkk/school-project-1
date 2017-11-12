@@ -12,6 +12,5 @@ This is a repo for a school project
 3. yarn install
 4. yarn start
 
-
-## To do:
-- Create webpage
+## Screenshot
+![screenshot](https://github.com/mjarkk/wotnlclans/blob/master/pagescreenshot.png)
