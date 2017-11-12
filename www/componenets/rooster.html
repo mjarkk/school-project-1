@@ -1,7 +1,23 @@
 <div class="roosters box">
   <h1 class="title">Roosters</h1>
   <div class="timetablenavigator" v-if="showtimetable && timetablefound">
-    <i class="material-icons" v-on:click="backtosearch()">search</i>{{ timetableclassname }}
+    <i class="material-icons icon-left" v-on:click="backtosearch()">search</i>
+    <div>{{ timetableclassname }}</div>
+    <div class="share">
+      <i class="material-icons icon-right" onClick="document.getElementById('sharethisurl').focus();">share</i>
+      <div class="popupcontainer">
+        <div class="popup">
+          <label for="sharethisurl">URL</label>
+          <input
+            type="text"
+            id="sharethisurl"
+            v-model="shareurl"
+            onfocus="OpenSharePopup();"
+            onClick="this.select();"
+            onblur="CloseSharePopup();">
+        </div>
+      </div>
+    </div>
   </div>
   <div class="schedulemenu" v-if="schedulemenu && timetablefound">
     <div class="search">

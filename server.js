@@ -22,6 +22,7 @@ var timetabledata = {
   links: [],
   LinksByIndex: {}
 }
+const puppeteer = require('puppeteer')
 const express = require('express')
 const sha256 = require('sha256')
 const bodyParser = require('body-parser')
@@ -33,7 +34,6 @@ const request = require('request')
 const Discord = require("discord.js")
 const ejs = require('ejs')
 const path = require('path');
-const client = new Discord.Client()
 const app = express()
 
 app.set('view engine', 'ejs');
@@ -198,20 +198,25 @@ function UpdateTimeTableLinks() {
 UpdateTimeTableLinks()
 
 // discord bot
+const client = new Discord.Client()
 client.on('ready', () => {
   console.log('I am ready!');
 });
-
 client.on('message', message => {
   var message = message;
   if (message.content === 'ping') {
     message.reply('pong')
+  } else if (message.content === '!rooster') {
+    var rooster = 'B-ITB4-1e'
+    timetablescreenshot(rooster,function() {
+      message.channel.sendMessage("Het rooster van: " + rooster, {
+        file: './discord-bot-content/screenshot.png'
+      });
+    })
   } else if (message.content.startsWith('!rooster')) {
-
     message.reply('can\'t do')
   }
 });
-
 client.login(config.DiscordToken);
 
 // rooster api from: https://github.com/mjarkk/node-xedule-web-api
@@ -236,6 +241,26 @@ function givetimetable(req, res) {
       why: "not xedule url"
     });
   }
+}
+
+function timetablescreenshot(timetablename, callback) {
+  (async () => {
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+    await page.setViewport({ width: 555, height: 925 });
+    await page.goto('http://localhost:' + port + '/rooster/' + timetablename, {waitUntil: 'networkidle2'});
+    await page.screenshot({
+      path: './discord-bot-content/screenshot.png',
+      clip: {
+        x: 10,
+        y: 170,
+        width: 535,
+        height: 700
+      }
+    });
+    await browser.close();
+    callback()
+  })();
 }
 
 } else {

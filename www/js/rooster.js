@@ -5,6 +5,7 @@ Vue.component('rooster', {
       search: '',
       timetabletype: 'student',
       timetableclassname: '',
+      shareurl: '',
       fromofflinestorage: true,
       showtimetable: false,
       schedulemenu: false,
@@ -19,6 +20,11 @@ Vue.component('rooster', {
       },
       timetableoptions: []
     })
+  },
+  watch: {
+    timetableclassname: function(newval) {
+      this.shareurl = location.origin + '/rooster/' + this.timetableclassname;
+    }
   },
   methods: {
     backtosearch: function() {
@@ -102,3 +108,19 @@ Vue.component('rooster', {
 new Vue({
   el: '.roosterholder'
 })
+
+OpenSharePopup = function() {
+  var el = document.getElementsByClassName('popupcontainer')[0];
+  var el2 = el.getElementsByClassName('popup')[0];
+  el2.style.maxHeight = "80px";
+  el2.style.maxWidth = "95vw";
+  el.style.opacity = 1;
+  el.getElementsByTagName('input')[0].select()
+}
+CloseSharePopup = function() {
+  var el = document.getElementsByClassName('popupcontainer')[0];
+  var el2 = el.getElementsByClassName('popup')[0];
+  el.style.opacity = 0;
+  el2.style.maxHeight = "0px";
+  el2.style.maxWidth = "0px";
+}
