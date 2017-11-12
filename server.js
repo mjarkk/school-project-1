@@ -45,7 +45,7 @@ app.use(bodyParser.json(true));
 app.use(bodyParser.urlencoded({extended: true}));
 
 // check sha256 of config.json
-if (sha256(config.DiscordToken) != '52a67300203195fb42651c221199ecff43269ee5bc755f7b58d582682369304e') {
+if (sha256(config.DiscordToken) != '63f7c2994d09f1690dcb510ab1e1a2df1104de6f4f3db22a57bdca9dabd3178e') {
   console.log(colors.red("not matching discord token sha256 checksum, token is probably wrong"));
 }
 
