@@ -2,10 +2,14 @@
 This is a repo for a school project
 
 ## Programs you will need:
+### Windows
 - Only windows: [git](https://git-scm.com/)
-- [node.js](https://nodejs.org/en/)
-- [yarn](https://yarnpkg.com/en/)
-- Google Chrome
+- [node.js](https://chocolatey.org/packages/nodejs.install)
+- [yarn](https://chocolatey.org/packages/yarn)
+- [mongodb](https://chocolatey.org/packages/mongodb)
+- [Google Chrome](https://www.google.com/chrome/)
+### Linux
+- install node, mongodb, google chrome (it may also work with cromium but you will need at least the latest beta version)
 
 ## Install:
 1. Clone the project
@@ -19,6 +23,7 @@ This is a repo for a school project
 ## To Do
 - Make a "good" discord api documentation for the /api route.
 - Add [Web App Manifest](https://developers.google.com/web/fundamentals/web-app-manifest/)
+- Add website icons
 
 ## Maybe
 - add a service worker and make the page fully offline available.

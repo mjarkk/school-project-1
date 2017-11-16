@@ -1,8 +1,35 @@
 const fs = require('fs-extra')
 const colors = require('colors')
 const cheerio = require('cheerio')
+const puppeteer = require('puppeteer')
+const express = require('express')
+const sha256 = require('sha256')
+const bodyParser = require('body-parser')
+const shell = require('shelljs')
+const watch = require('node-watch')
+const sass = require('npm-sass')
+const fetch = require('node-fetch')
+const request = require('request')
+const Discord = require("discord.js")
+const ejs = require('ejs')
+const path = require('path')
+const MongoClient = require('mongodb').MongoClient
+const app = express()
+
 let configfile = './config.json';
+const dburl = "mongodb://localhost:27017/voorportaal-ict";
 const port = 7777;
+
+MongoClient.connect(dburl, function(err, db) {
+  if (err) {
+    console.log(colors.red.bold('no connection to mongodb database'));
+    db.close();
+    process.exit()
+  } else {
+    console.log(colors.green("Connected to database!"));
+    db.close();
+  }
+});
 
 if (!fs.pathExistsSync(configfile)) {
   console.log(colors.red.bold('---------------------------------------------'));
@@ -23,19 +50,6 @@ var timetabledata = {
   links: [],
   LinksByIndex: {}
 }
-const puppeteer = require('puppeteer')
-const express = require('express')
-const sha256 = require('sha256')
-const bodyParser = require('body-parser')
-const shell = require('shelljs')
-const watch = require('node-watch')
-const sass = require('npm-sass')
-const fetch = require('node-fetch')
-const request = require('request')
-const Discord = require("discord.js")
-const ejs = require('ejs')
-const path = require('path');
-const app = express()
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, '/www'));
@@ -158,7 +172,7 @@ function startserv() {
 // sass compiler
 watch('./www/css/', { recursive: true }, function(evt, name) {
   if (evt == 'update' && name.endsWith('.sass')) {
-    sass('./' + name, function (err, result) {
+    sass('./' + name, { outputStyle: 'compressed' },function (err, result) {
       if (!err) {
         console.log('compiled sass file: ' + result.stats.entry);
         fs.writeFile(result.stats.entry.replace('.sass','.css'),result.css)
@@ -171,7 +185,7 @@ fs.readdir('./www/css/', function(err, items) {
   for (var i = 0; i < items.length; i++) {
     var name = 'www/css/' + items[i]
     if (name.endsWith('.sass')) {
-      sass('./' + name, function (err, result) {
+      sass('./' + name, { outputStyle: 'compressed' }, function (err, result) {
         if (!err) {
           console.log('compiled sass file: ' + result.stats.entry);
           fs.writeFile(result.stats.entry.replace('.sass','.css'),result.css)

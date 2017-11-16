@@ -22,7 +22,15 @@ body
   h1
     font-size: 25px
     color: white
-
+    span
+      position: relative
+      top: -6px
+    a
+      max-height: 20px
+      i
+        padding-right: 7px
+        color: white
+        font-size: 30px
 .appshell
   .background
     height: 95px
@@ -42,6 +50,51 @@ body
     -webkit-align-items: flex-start
     -webkit-flex-direction: row
     -webkit-flex-wrap: wrap
+    .big-box
+      margin: 20px 10px
+      width: 100vw
+      background-color: white
+      box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)
+      max-width: 1200px
+      box-sizing: border-box
+      h1.title
+        font-size: 35px
+        padding: 10px 10px 0px 10px
+      .list
+        padding: 10px 10px 0px 10px
+        span
+          background-color: #36393E
+          display: inline-block
+          padding: 3px 10px
+          color: white
+          border-radius: 5px
+        p
+          padding: 2px 0px
+        p::before
+          content: '-'
+          color: rgb(255, 0, 255)
+          font-weight: 700
+          position: relative
+          left: -5px
+      .do
+        padding: 0px 10px
+        a
+          text-decoration: none
+          color: rgb(135, 0, 255)
+          cursor: pointer
+        a:hover
+          text-decoration: underline
+      .screenshot
+        margin-top: 10px
+        width: 100%
+        padding: 10px
+        box-sizing: border-box
+        background-color: #36393E
+        img
+          max-width: 100%
+    @media (max-width: 900px)
+      .big-box
+        margin: 0px 0px
     .box
       margin: 20px 10px
       width: 100vw
